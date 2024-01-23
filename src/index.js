@@ -1,3 +1,5 @@
+//poem:
+
 function writePoem(response) {
   let poem = response.data.answer;
 
@@ -28,3 +30,43 @@ function generatePoem(event) {
 
 let poemButton = document.querySelector("#poem-form");
 poemButton.addEventListener("submit", generatePoem);
+
+//joke:
+
+new Typewriter("#joke-heading", {
+  strings: "Want to hear a joke? ",
+  autoStart: true,
+  cursor: "",
+});
+
+function tellJoke(response) {
+  let joke = response.data.answer;
+  //console.log(joke);
+  new Typewriter("#joke", {
+    strings: joke,
+    autoStart: true,
+    delay: 20,
+    cursor: "",
+  });
+}
+
+function generateJoke(event) {
+  event.preventDefault();
+  let searchInput = document.querySelector("#topic");
+  let topic = searchInput.value;
+  let apiKey = "407bfao61470cbta2ae38d4403fe23ad";
+  let context =
+    "you have traveled the world and have a good sense of humor. please be creative and find good humor. your mission is to generate funny jokes and follow user instructions:";
+  let prompt = `user instructions: Please generate a funny joke about ${topic}. Your answer displays only the joke`;
+  let apiUrl = `https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
+
+  let jokeElement = document.querySelector("#joke");
+  jokeElement.classList.remove("hidden");
+  jokeElement.innerHTML = `<div class="generate">⌛Generating joke about ${topic}...</div>`;
+
+  axios.get(apiUrl).then(tellJoke);
+}
+
+let jokeButton = document.querySelector("#topic-form");
+
+jokeButton.addEventListener("submit", generateJoke);
